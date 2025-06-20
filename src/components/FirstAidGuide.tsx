@@ -1,53 +1,257 @@
 
 import React, { useState } from 'react';
-import { AlertTriangle, Video, FileText } from 'lucide-react';
+import { AlertTriangle, Video, FileText, Heart, Flame, Bone, Droplets, Zap } from 'lucide-react';
 
 interface FirstAidStep {
   step: number;
   title: string;
   description: string;
   critical?: boolean;
+  warning?: string;
 }
 
 const FirstAidGuide = () => {
   const [selectedGuide, setSelectedGuide] = useState<string>('snakebite');
 
-  const snakeBiteSteps: FirstAidStep[] = [
-    {
-      step: 1,
-      title: "Stay Calm",
-      description: "Keep the victim calm and still. Movement can spread venom faster.",
-      critical: true
+  const firstAidData = {
+    snakebite: {
+      steps: [
+        {
+          step: 1,
+          title: "Stay Calm",
+          description: "Keep the victim calm and still. Movement can spread venom faster.",
+          critical: true
+        },
+        {
+          step: 2,
+          title: "Call Emergency Services",
+          description: "Immediately call emergency services or use our emergency video call.",
+          critical: true
+        },
+        {
+          step: 3,
+          title: "Remove Jewelry",
+          description: "Remove rings, watches, and tight clothing before swelling begins."
+        },
+        {
+          step: 4,
+          title: "Position the Bite",
+          description: "Keep the bitten area lower than the heart if possible."
+        },
+        {
+          step: 5,
+          title: "Clean the Wound",
+          description: "Clean with water if available, but don't delay other treatments."
+        },
+        {
+          step: 6,
+          title: "Mark Swelling",
+          description: "Mark the edge of swelling with a pen and note the time.",
+          warning: "Do NOT cut the wound, suck the venom, or apply ice."
+        }
+      ]
     },
-    {
-      step: 2,
-      title: "Call Emergency Services",
-      description: "Immediately call emergency services or use our emergency video call.",
-      critical: true
+    heartattack: {
+      steps: [
+        {
+          step: 1,
+          title: "Call Emergency Services",
+          description: "Call 1990 immediately. Time is critical for heart attacks.",
+          critical: true
+        },
+        {
+          step: 2,
+          title: "Give Aspirin",
+          description: "If conscious and not allergic, give 300mg aspirin to chew.",
+          critical: true
+        },
+        {
+          step: 3,
+          title: "Position Comfortably",
+          description: "Sit them upright, leaning against something for support."
+        },
+        {
+          step: 4,
+          title: "Loosen Clothing",
+          description: "Loosen any tight clothing around neck, chest, and waist."
+        },
+        {
+          step: 5,
+          title: "Monitor Breathing",
+          description: "Check breathing and pulse every 2 minutes.",
+          critical: true
+        },
+        {
+          step: 6,
+          title: "Prepare for CPR",
+          description: "If they become unconscious and stop breathing, start CPR.",
+          warning: "Do NOT leave them alone. Stay with them until help arrives."
+        }
+      ]
     },
-    {
-      step: 3,
-      title: "Remove Jewelry",
-      description: "Remove rings, watches, and tight clothing before swelling begins."
+    cpr: {
+      steps: [
+        {
+          step: 1,
+          title: "Check Responsiveness",
+          description: "Tap shoulders firmly and shout 'Are you okay?'",
+          critical: true
+        },
+        {
+          step: 2,
+          title: "Call for Help",
+          description: "Call 1990 and ask someone to find an AED if available.",
+          critical: true
+        },
+        {
+          step: 3,
+          title: "Position Hands",
+          description: "Place heel of one hand on center of chest, other hand on top.",
+          critical: true
+        },
+        {
+          step: 4,
+          title: "Chest Compressions",
+          description: "Push hard and fast at least 2 inches deep, 100-120 per minute.",
+          critical: true
+        },
+        {
+          step: 5,
+          title: "Give Rescue Breaths",
+          description: "Tilt head back, lift chin, give 2 breaths after every 30 compressions."
+        },
+        {
+          step: 6,
+          title: "Continue CPR",
+          description: "Keep going until emergency services arrive or person responds.",
+          warning: "Don't stop CPR unless the person starts breathing normally."
+        }
+      ]
     },
-    {
-      step: 4,
-      title: "Position the Bite",
-      description: "Keep the bitten area lower than the heart if possible."
+    burns: {
+      steps: [
+        {
+          step: 1,
+          title: "Stop the Burning",
+          description: "Remove from heat source. Stop, drop, and roll if clothing is on fire.",
+          critical: true
+        },
+        {
+          step: 2,
+          title: "Cool the Burn",
+          description: "Run cool (not cold) water over burn for 10-20 minutes.",
+          critical: true
+        },
+        {
+          step: 3,
+          title: "Remove Items",
+          description: "Remove jewelry and loose clothing before swelling begins."
+        },
+        {
+          step: 4,
+          title: "Protect the Area",
+          description: "Cover with sterile gauze or clean cloth. Don't use cotton."
+        },
+        {
+          step: 5,
+          title: "Pain Relief",
+          description: "Give over-the-counter pain medication if conscious."
+        },
+        {
+          step: 6,
+          title: "Seek Medical Help",
+          description: "Get medical attention for burns larger than 3 inches.",
+          warning: "Do NOT use ice, butter, or ointments on burns."
+        }
+      ]
     },
-    {
-      step: 5,
-      title: "Clean the Wound",
-      description: "Clean with water if available, but don't delay other treatments."
+    fracture: {
+      steps: [
+        {
+          step: 1,
+          title: "Don't Move the Person",
+          description: "Keep the injured person still unless they're in immediate danger.",
+          critical: true
+        },
+        {
+          step: 2,
+          title: "Call Emergency Services",
+          description: "Call for medical help, especially for head, neck, or back injuries.",
+          critical: true
+        },
+        {
+          step: 3,
+          title: "Stop Bleeding",
+          description: "Apply pressure around the wound, not directly on protruding bone."
+        },
+        {
+          step: 4,
+          title: "Immobilize the Area",
+          description: "Support the injured area with splints or slings if trained."
+        },
+        {
+          step: 5,
+          title: "Apply Ice",
+          description: "Apply ice wrapped in cloth for 15-20 minutes to reduce swelling."
+        },
+        {
+          step: 6,
+          title: "Treat for Shock",
+          description: "Keep person warm and elevate legs if no spinal injury suspected.",
+          warning: "Do NOT try to realign the bone or push protruding bones back."
+        }
+      ]
+    },
+    poisoning: {
+      steps: [
+        {
+          step: 1,
+          title: "Call Poison Control",
+          description: "Call poison control center immediately: 1990",
+          critical: true
+        },
+        {
+          step: 2,
+          title: "Identify the Poison",
+          description: "Try to identify what was consumed and keep the container.",
+          critical: true
+        },
+        {
+          step: 3,
+          title: "Remove from Mouth",
+          description: "If conscious, rinse mouth and remove any remaining substance."
+        },
+        {
+          step: 4,
+          title: "Position Safely",
+          description: "If conscious, keep sitting up. If unconscious, turn on side."
+        },
+        {
+          step: 5,
+          title: "Monitor Vital Signs",
+          description: "Check breathing and consciousness every few minutes.",
+          critical: true
+        },
+        {
+          step: 6,
+          title: "Follow Expert Advice",
+          description: "Follow instructions from poison control or emergency services.",
+          warning: "Do NOT induce vomiting unless specifically told to do so."
+        }
+      ]
     }
-  ];
+  };
 
   const guides = [
-    { id: 'snakebite', name: 'Snake Bite', icon: AlertTriangle },
-    { id: 'cpr', name: 'CPR', icon: FileText },
-    { id: 'burns', name: 'Burns', icon: FileText },
-    { id: 'fracture', name: 'Fractures', icon: FileText }
+    { id: 'snakebite', name: 'Snake Bite', icon: AlertTriangle, urgent: true },
+    { id: 'heartattack', name: 'Heart Attack', icon: Heart, urgent: true },
+    { id: 'cpr', name: 'CPR', icon: Heart, urgent: true },
+    { id: 'burns', name: 'Burns', icon: Flame, urgent: false },
+    { id: 'fracture', name: 'Fractures', icon: Bone, urgent: false },
+    { id: 'poisoning', name: 'Poisoning', icon: Droplets, urgent: true }
   ];
+
+  const currentGuide = firstAidData[selectedGuide as keyof typeof firstAidData];
 
   return (
     <div className="bg-white rounded-xl shadow-lg p-6">
@@ -62,29 +266,37 @@ const FirstAidGuide = () => {
               onClick={() => setSelectedGuide(guide.id)}
               className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-colors ${
                 selectedGuide === guide.id
-                  ? 'bg-blue-600 text-white'
+                  ? 'bg-red-600 text-white'
+                  : guide.urgent
+                  ? 'bg-red-50 text-red-700 hover:bg-red-100 border border-red-200'
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
             >
               <IconComponent className="w-4 h-4" />
-              <span>{guide.name}</span>
+              <span className="font-medium">{guide.name}</span>
+              {guide.urgent && selectedGuide !== guide.id && (
+                <span className="text-xs bg-red-500 text-white px-1 rounded">URGENT</span>
+              )}
             </button>
           );
         })}
       </div>
 
-      {selectedGuide === 'snakebite' && (
+      {currentGuide && (
         <div className="space-y-4">
           <div className="bg-red-50 border-l-4 border-red-500 p-4 mb-4">
             <div className="flex items-center">
               <AlertTriangle className="w-5 h-5 text-red-500 mr-2" />
               <span className="text-red-700 font-semibold">
-                Time is critical! Seek immediate medical attention.
+                {guides.find(g => g.id === selectedGuide)?.urgent 
+                  ? "Time is critical! Seek immediate medical attention."
+                  : "Follow these steps carefully and seek medical help when needed."
+                }
               </span>
             </div>
           </div>
 
-          {snakeBiteSteps.map((step) => (
+          {currentGuide.steps.map((step) => (
             <div
               key={step.step}
               className={`p-4 rounded-lg border-l-4 ${
@@ -99,9 +311,17 @@ const FirstAidGuide = () => {
                 }`}>
                   {step.step}
                 </div>
-                <div>
+                <div className="flex-1">
                   <h3 className="font-semibold text-gray-800 mb-1">{step.title}</h3>
-                  <p className="text-gray-600 text-sm">{step.description}</p>
+                  <p className="text-gray-600 text-sm mb-2">{step.description}</p>
+                  {step.warning && (
+                    <div className="bg-yellow-50 border border-yellow-200 rounded p-2 mt-2">
+                      <p className="text-yellow-800 text-xs font-medium flex items-center">
+                        <AlertTriangle className="w-3 h-3 mr-1" />
+                        Warning: {step.warning}
+                      </p>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -116,16 +336,9 @@ const FirstAidGuide = () => {
               Connect with our medical team for real-time guidance during the emergency.
             </p>
             <button className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
-              Start Video Call
+              Start Emergency Video Call
             </button>
           </div>
-        </div>
-      )}
-
-      {selectedGuide !== 'snakebite' && (
-        <div className="text-center py-8 text-gray-500">
-          <FileText className="w-12 h-12 mx-auto mb-4 opacity-50" />
-          <p>First aid guide for {guides.find(g => g.id === selectedGuide)?.name} coming soon...</p>
         </div>
       )}
     </div>

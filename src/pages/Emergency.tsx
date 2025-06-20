@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import Navigation from '../components/Navigation';
 import FirstAidGuide from '../components/FirstAidGuide';
 import EmergencyButton from '../components/EmergencyButton';
-import { Video, Phone, MapPin, AlertTriangle } from 'lucide-react';
+import { Video, Phone, MapPin, AlertTriangle, Heart, Flame, Bone, Droplets, Zap, Car } from 'lucide-react';
 import { useToast } from '../hooks/use-toast';
 
 const Emergency = () => {
@@ -12,15 +12,26 @@ const Emergency = () => {
   const { toast } = useToast();
 
   const emergencyTypes = [
-    { id: 'snakebite', name: 'Snake Bite', urgent: true },
-    { id: 'heartattack', name: 'Heart Attack', urgent: true },
-    { id: 'accident', name: 'Accident', urgent: true },
-    { id: 'burn', name: 'Burn Injury', urgent: false },
-    { id: 'fracture', name: 'Fracture', urgent: false },
-    { id: 'poisoning', name: 'Poisoning', urgent: true }
+    { id: 'snakebite', name: 'Snake Bite', icon: AlertTriangle, urgent: true, color: 'bg-red-500' },
+    { id: 'heartattack', name: 'Heart Attack', icon: Heart, urgent: true, color: 'bg-red-600' },
+    { id: 'accident', name: 'Accident', icon: Car, urgent: true, color: 'bg-red-500' },
+    { id: 'burn', name: 'Burn Injury', icon: Flame, urgent: false, color: 'bg-orange-500' },
+    { id: 'fracture', name: 'Fracture', icon: Bone, urgent: false, color: 'bg-yellow-500' },
+    { id: 'poisoning', name: 'Poisoning', icon: Droplets, urgent: true, color: 'bg-purple-500' },
+    { id: 'electric', name: 'Electric Shock', icon: Zap, urgent: true, color: 'bg-blue-500' },
+    { id: 'drowning', name: 'Drowning', icon: Droplets, urgent: true, color: 'bg-cyan-500' }
   ];
 
   const handleVideoCall = () => {
+    if (!selectedEmergencyType) {
+      toast({
+        title: "Please Select Emergency Type",
+        description: "Please select your emergency type before starting a video call.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setIsVideoCallActive(true);
     toast({
       title: "Initiating Video Call",
@@ -31,15 +42,26 @@ const Emergency = () => {
     setTimeout(() => {
       toast({
         title: "Video Call Connected",
-        description: "Dr. Silva is now live. Please describe your emergency.",
+        description: `Dr. Silva is now live for ${emergencyTypes.find(t => t.id === selectedEmergencyType)?.name}. Please describe your emergency.`,
       });
     }, 2000);
   };
 
+  const handleEmergencyTypeSelect = (typeId: string) => {
+    setSelectedEmergencyType(typeId);
+    const selectedType = emergencyTypes.find(t => t.id === typeId);
+    toast({
+      title: "Emergency Type Selected",
+      description: `Selected: ${selectedType?.name}. ${selectedType?.urgent ? 'This is a critical emergency!' : 'Please follow first aid guidelines.'}`,
+      variant: selectedType?.urgent ? "destructive" : "default",
+    });
+  };
+
   const nearbyHospitals = [
-    { name: 'Kurunegala General Hospital', distance: '2.1 km', phone: '+94-37-2222221' },
-    { name: 'Lanka Hospital Kurunegala', distance: '3.5 km', phone: '+94-37-2233445' },
-    { name: 'National Hospital Emergency', distance: '5.2 km', phone: '+94-37-2244567' }
+    { name: 'Kurunegala General Hospital', distance: '2.1 km', phone: '+94-37-2222221', specialties: 'Emergency, Trauma' },
+    { name: 'Lanka Hospital Kurunegala', distance: '3.5 km', phone: '+94-37-2233445', specialties: 'Cardiology, Burns' },
+    { name: 'National Hospital Emergency', distance: '5.2 km', phone: '+94-37-2244567', specialties: 'Poison Control, ICU' },
+    { name: 'Wayamba Provincial Hospital', distance: '1.8 km', phone: '+94-37-2255667', specialties: 'General Emergency' }
   ];
 
   return (
@@ -60,25 +82,48 @@ const Emergency = () => {
             <div className="bg-white rounded-xl shadow-lg p-6">
               <h2 className="text-2xl font-bold text-gray-800 mb-4">What's your emergency?</h2>
               <div className="grid grid-cols-2 gap-3">
-                {emergencyTypes.map((type) => (
-                  <button
-                    key={type.id}
-                    onClick={() => setSelectedEmergencyType(type.id)}
-                    className={`p-3 rounded-lg border-2 transition-all ${
-                      selectedEmergencyType === type.id
-                        ? 'border-red-500 bg-red-50'
-                        : 'border-gray-200 hover:border-red-300'
-                    } ${type.urgent ? 'bg-red-50' : 'bg-gray-50'}`}
-                  >
-                    <div className="flex items-center space-x-2">
-                      {type.urgent && <AlertTriangle className="w-4 h-4 text-red-500" />}
-                      <span className={`font-medium ${type.urgent ? 'text-red-700' : 'text-gray-700'}`}>
-                        {type.name}
-                      </span>
-                    </div>
-                  </button>
-                ))}
+                {emergencyTypes.map((type) => {
+                  const IconComponent = type.icon;
+                  return (
+                    <button
+                      key={type.id}
+                      onClick={() => handleEmergencyTypeSelect(type.id)}
+                      className={`p-3 rounded-lg border-2 transition-all ${
+                        selectedEmergencyType === type.id
+                          ? 'border-red-500 bg-red-50 shadow-md'
+                          : 'border-gray-200 hover:border-red-300 hover:shadow-sm'
+                      } ${type.urgent ? 'bg-red-50' : 'bg-gray-50'}`}
+                    >
+                      <div className="flex flex-col items-center space-y-2">
+                        <div className={`p-2 rounded-full ${type.color} text-white`}>
+                          <IconComponent className="w-5 h-5" />
+                        </div>
+                        <span className={`font-medium text-center text-sm ${
+                          type.urgent ? 'text-red-700' : 'text-gray-700'
+                        }`}>
+                          {type.name}
+                        </span>
+                        {type.urgent && (
+                          <span className="text-xs bg-red-500 text-white px-2 py-1 rounded">
+                            URGENT
+                          </span>
+                        )}
+                      </div>
+                    </button>
+                  );
+                })}
               </div>
+              
+              {selectedEmergencyType && (
+                <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                  <p className="text-blue-800 text-sm">
+                    <strong>Selected:</strong> {emergencyTypes.find(t => t.id === selectedEmergencyType)?.name}
+                    {emergencyTypes.find(t => t.id === selectedEmergencyType)?.urgent && 
+                      " - This is a critical emergency! Consider calling emergency services immediately."
+                    }
+                  </p>
+                </div>
+              )}
             </div>
 
             {/* Video Call Section */}
@@ -95,6 +140,11 @@ const Emergency = () => {
                     <p className="text-gray-600 mb-4">
                       Get real-time guidance from qualified medical professionals during your emergency.
                     </p>
+                    {selectedEmergencyType && (
+                      <p className="text-sm text-blue-600 mb-4">
+                        Ready to connect for: <strong>{emergencyTypes.find(t => t.id === selectedEmergencyType)?.name}</strong>
+                      </p>
+                    )}
                   </div>
                   
                   <EmergencyButton onClick={handleVideoCall} />
@@ -112,16 +162,22 @@ const Emergency = () => {
                     <h3 className="text-lg font-semibold text-green-800 mb-2">
                       Video Call Active
                     </h3>
-                    <p className="text-green-700 mb-4">
+                    <p className="text-green-700 mb-2">
                       Connected with Dr. Silva - Emergency Medicine Specialist
+                    </p>
+                    <p className="text-sm text-green-600 mb-4">
+                      Emergency Type: {emergencyTypes.find(t => t.id === selectedEmergencyType)?.name}
                     </p>
                     <div className="bg-white rounded-lg p-4 mb-4">
                       <div className="w-full h-48 bg-gray-200 rounded-lg flex items-center justify-center">
-                        <span className="text-gray-500">Video Stream Placeholder</span>
+                        <span className="text-gray-500">Video Stream Active</span>
                       </div>
                     </div>
                     <div className="flex space-x-3">
-                      <button className="flex-1 bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-700">
+                      <button 
+                        onClick={() => setIsVideoCallActive(false)}
+                        className="flex-1 bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-700"
+                      >
                         End Call
                       </button>
                       <button className="flex-1 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700">
@@ -145,6 +201,7 @@ const Emergency = () => {
                     <div>
                       <h3 className="font-semibold text-gray-800">{hospital.name}</h3>
                       <p className="text-sm text-gray-600">{hospital.distance} away</p>
+                      <p className="text-xs text-blue-600">{hospital.specialties}</p>
                     </div>
                     <button 
                       className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 flex items-center space-x-2"
