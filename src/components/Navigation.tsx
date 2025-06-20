@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { useLocation, Link } from 'react-router-dom';
-import { Bell, User, Phone, Home } from 'lucide-react';
+import { Bell, User, Phone, Home, LogIn } from 'lucide-react';
 
 const Navigation = () => {
   const location = useLocation();
@@ -49,6 +49,15 @@ const Navigation = () => {
               >
                 <Phone className="w-4 h-4 inline mr-1" />
                 Emergency
+              </Link>
+              <Link
+                to="/login"
+                className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                  isActive('/login') ? 'bg-red-700' : 'hover:bg-red-500'
+                }`}
+              >
+                <LogIn className="w-4 h-4 inline mr-1" />
+                Login
               </Link>
               <Link
                 to="/profile"
