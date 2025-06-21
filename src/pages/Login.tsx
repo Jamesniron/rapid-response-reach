@@ -27,6 +27,10 @@ const Login = () => {
     // Simulate login process
     setTimeout(() => {
       setIsLoading(false);
+      // Set logged-in state
+      localStorage.setItem('isLoggedIn', 'true');
+      localStorage.setItem('userEmail', formData.email);
+      
       toast({
         title: "Login Successful!",
         description: "Welcome back to Emergyfy.",

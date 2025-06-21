@@ -1,12 +1,31 @@
 
 import React from 'react';
-import { useLocation, Link } from 'react-router-dom';
-import { Bell, User, Phone, Home, LogIn } from 'lucide-react';
+import { useLocation, Link, useNavigate } from 'react-router-dom';
+import { Bell, User, Phone, Home, LogIn, LogOut } from 'lucide-react';
+import { useToast } from '../hooks/use-toast';
 
 const Navigation = () => {
   const location = useLocation();
+  const navigate = useNavigate();
+  const { toast } = useToast();
   
   const isActive = (path: string) => location.pathname === path;
+  
+  // Check if user is logged in (you can replace this with actual auth state)
+  const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+  
+  const handleLogout = () => {
+    // Clear user session
+    localStorage.removeItem('isLoggedIn');
+    localStorage.removeItem('userEmail');
+    
+    toast({
+      title: "Logged out successfully",
+      description: "You have been safely logged out.",
+    });
+    
+    navigate('/');
+  };
   
   return (
     <nav className="bg-red-600 text-white shadow-lg">
@@ -32,15 +51,17 @@ const Navigation = () => {
                 <Home className="w-4 h-4 inline mr-1" />
                 Home
               </Link>
-              <Link
-                to="/dashboard"
-                className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                  isActive('/dashboard') ? 'bg-red-700' : 'hover:bg-red-500'
-                }`}
-              >
-                <Bell className="w-4 h-4 inline mr-1" />
-                Dashboard
-              </Link>
+              {isLoggedIn && (
+                <Link
+                  to="/dashboard"
+                  className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                    isActive('/dashboard') ? 'bg-red-700' : 'hover:bg-red-500'
+                  }`}
+                >
+                  <Bell className="w-4 h-4 inline mr-1" />
+                  Dashboard
+                </Link>
+              )}
               <Link
                 to="/emergency"
                 className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
@@ -50,24 +71,36 @@ const Navigation = () => {
                 <Phone className="w-4 h-4 inline mr-1" />
                 Emergency
               </Link>
-              <Link
-                to="/login"
-                className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                  isActive('/login') ? 'bg-red-700' : 'hover:bg-red-500'
-                }`}
-              >
-                <LogIn className="w-4 h-4 inline mr-1" />
-                Login
-              </Link>
-              <Link
-                to="/profile"
-                className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                  isActive('/profile') ? 'bg-red-700' : 'hover:bg-red-500'
-                }`}
-              >
-                <User className="w-4 h-4 inline mr-1" />
-                Profile
-              </Link>
+              {!isLoggedIn ? (
+                <Link
+                  to="/login"
+                  className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                    isActive('/login') ? 'bg-red-700' : 'hover:bg-red-500'
+                  }`}
+                >
+                  <LogIn className="w-4 h-4 inline mr-1" />
+                  Login
+                </Link>
+              ) : (
+                <>
+                  <Link
+                    to="/profile"
+                    className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                      isActive('/profile') ? 'bg-red-700' : 'hover:bg-red-500'
+                    }`}
+                  >
+                    <User className="w-4 h-4 inline mr-1" />
+                    Profile
+                  </Link>
+                  <button
+                    onClick={handleLogout}
+                    className="px-3 py-2 rounded-md text-sm font-medium transition-colors hover:bg-red-500 flex items-center"
+                  >
+                    <LogOut className="w-4 h-4 inline mr-1" />
+                    Logout
+                  </button>
+                </>
+              )}
             </div>
           </div>
         </div>
