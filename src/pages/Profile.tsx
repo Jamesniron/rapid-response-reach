@@ -1,11 +1,13 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Navigation from '../components/Navigation';
-import { User, Phone, Mail, MapPin, Heart, Settings, Bell } from 'lucide-react';
+import { User, Phone, Mail, MapPin, Heart, Settings, Bell, Download } from 'lucide-react';
 import { useToast } from '../hooks/use-toast';
 
 const Profile = () => {
   const [isEditing, setIsEditing] = useState(false);
+  const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+  const [showInstallButton, setShowInstallButton] = useState(false);
   const [profile, setProfile] = useState({
     fullName: 'Kamal Perera',
     nic: '123456789V',
@@ -21,6 +23,43 @@ const Profile = () => {
     }
   });
   const { toast } = useToast();
+
+  // Check for PWA install prompt
+  useEffect(() => {
+    const handleBeforeInstallPrompt = (e: any) => {
+      e.preventDefault();
+      setDeferredPrompt(e);
+      setShowInstallButton(true);
+    };
+
+    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+
+    // Check if app is already installed
+    if (window.matchMedia('(display-mode: standalone)').matches) {
+      setShowInstallButton(false);
+    }
+
+    return () => {
+      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+    };
+  }, []);
+
+  const handleInstallApp = async () => {
+    if (!deferredPrompt) return;
+
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+    
+    if (outcome === 'accepted') {
+      toast({
+        title: "App Installing",
+        description: "Emergyfy is being installed on your device.",
+      });
+    }
+    
+    setDeferredPrompt(null);
+    setShowInstallButton(false);
+  };
 
   const handleSave = () => {
     setIsEditing(false);
@@ -62,16 +101,27 @@ const Profile = () => {
                 <p className="text-gray-600">Emergency Profile</p>
               </div>
             </div>
-            <button
-              onClick={() => isEditing ? handleSave() : setIsEditing(true)}
-              className={`px-6 py-2 rounded-lg font-semibold transition-colors ${
-                isEditing 
-                  ? 'bg-green-600 text-white hover:bg-green-700' 
-                  : 'bg-blue-600 text-white hover:bg-blue-700'
-              }`}
-            >
-              {isEditing ? 'Save Changes' : 'Edit Profile'}
-            </button>
+            <div className="flex space-x-3">
+              {showInstallButton && (
+                <button
+                  onClick={handleInstallApp}
+                  className="px-4 py-2 bg-green-600 text-white rounded-lg font-semibold hover:bg-green-700 transition-colors flex items-center space-x-2"
+                >
+                  <Download className="w-4 h-4" />
+                  <span>Install App</span>
+                </button>
+              )}
+              <button
+                onClick={() => isEditing ? handleSave() : setIsEditing(true)}
+                className={`px-6 py-2 rounded-lg font-semibold transition-colors ${
+                  isEditing 
+                    ? 'bg-green-600 text-white hover:bg-green-700' 
+                    : 'bg-blue-600 text-white hover:bg-blue-700'
+                }`}
+              >
+                {isEditing ? 'Save Changes' : 'Edit Profile'}
+              </button>
+            </div>
           </div>
         </div>
 
@@ -101,8 +151,21 @@ const Profile = () => {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">NIC Number</label>
-                <p className="text-gray-900">{profile.nic}</p>
-                {!isEditing && <p className="text-xs text-gray-500">NIC cannot be changed</p>}
+                {isEditing ? (
+                  <div>
+                    <input
+                      type="text"
+                      name="nic"
+                      value={profile.nic}
+                      onChange={handleInputChange}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                      placeholder="Enter your NIC number"
+                    />
+                    <p className="text-xs text-amber-600 mt-1">⚠️ Please ensure NIC number is correct. Changes require verification.</p>
+                  </div>
+                ) : (
+                  <p className="text-gray-900">{profile.nic}</p>
+                )}
               </div>
 
               <div>
@@ -202,6 +265,49 @@ const Profile = () => {
                   ) : (
                     <p className="text-gray-900">{profile.medicalInfo}</p>
                   )}
+                </div>
+              </div>
+            </div>
+
+            {/* Mobile App Installation Guide */}
+            <div className="bg-white rounded-xl shadow-lg p-6">
+              <h2 className="text-xl font-semibold text-gray-800 mb-6 flex items-center">
+                <Download className="w-5 h-5 mr-2 text-green-600" />
+                Mobile App Installation
+              </h2>
+              
+              <div className="space-y-4">
+                <div className="p-4 bg-green-50 rounded-lg">
+                  <h3 className="font-semibold text-green-800 mb-2">Install Emergyfy as Mobile App</h3>
+                  <p className="text-sm text-green-700 mb-3">
+                    Get faster access to emergency services by installing our app on your device.
+                  </p>
+                  
+                  <div className="space-y-2 text-sm text-green-700">
+                    <p><strong>Android:</strong></p>
+                    <ul className="list-disc list-inside ml-2 space-y-1">
+                      <li>Tap the menu (⋮) in your browser</li>
+                      <li>Select "Add to Home screen" or "Install app"</li>
+                      <li>Confirm installation</li>
+                    </ul>
+                    
+                    <p className="mt-3"><strong>iPhone/iPad:</strong></p>
+                    <ul className="list-disc list-inside ml-2 space-y-1">
+                      <li>Tap the Share button (□↗) in Safari</li>
+                      <li>Scroll down and tap "Add to Home Screen"</li>
+                      <li>Tap "Add" to confirm</li>
+                    </ul>
+                  </div>
+                </div>
+
+                <div className="p-4 bg-blue-50 rounded-lg">
+                  <h4 className="font-semibold text-blue-800 mb-2">Benefits of Installing:</h4>
+                  <ul className="text-sm text-blue-700 space-y-1">
+                    <li>• Works offline for emergency situations</li>
+                    <li>• Faster access from your home screen</li>
+                    <li>• Push notifications for alerts</li>
+                    <li>• Full-screen experience</li>
+                  </ul>
                 </div>
               </div>
             </div>
