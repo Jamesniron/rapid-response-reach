@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { AlertTriangle, MapPin, Clock } from 'lucide-react';
+import { AlertTriangle, MapPin, Clock, Mountain, Wind, Flame } from 'lucide-react';
 
 interface EmergencyAlertProps {
   type: 'flood' | 'earthquake' | 'cyclone' | 'landslide' | 'fire';
@@ -22,31 +22,58 @@ const EmergencyAlert = ({ type, severity, location, message, timestamp }: Emerge
   };
 
   const getTypeIcon = (type: string) => {
-    // Using available icons for different disaster types
-    return <AlertTriangle className="w-6 h-6" />;
+    switch (type) {
+      case 'earthquake': return <Mountain className="w-6 h-6" />;
+      case 'cyclone': return <Wind className="w-6 h-6" />;
+      case 'landslide': return <Mountain className="w-6 h-6" />;
+      case 'fire': return <Flame className="w-6 h-6" />;
+      case 'flood': return <AlertTriangle className="w-6 h-6" />;
+      default: return <AlertTriangle className="w-6 h-6" />;
+    }
+  };
+
+  const getAlertActions = (type: string) => {
+    switch (type) {
+      case 'earthquake':
+        return 'Drop, Cover, Hold On. Stay away from windows and heavy objects.';
+      case 'cyclone':
+        return 'Seek shelter immediately. Stay indoors and away from windows.';
+      case 'landslide':
+        return 'Evacuate to higher ground immediately. Avoid the slide area.';
+      case 'fire':
+        return 'Evacuate immediately. Stay low and move to assembly point.';
+      case 'flood':
+        return 'Move to higher ground. Avoid walking or driving through flood water.';
+      default:
+        return 'Follow emergency protocols and stay alert.';
+    }
   };
 
   return (
-    <div className={`${getSeverityColor(severity)} text-white p-4 rounded-lg border-l-4 shadow-lg mb-4 animate-pulse`}>
-      <div className="flex items-start space-x-3">
+    <div className={`${getSeverityColor(severity)} text-white p-6 rounded-lg border-l-4 shadow-lg mb-4 animate-pulse`}>
+      <div className="flex items-start space-x-4">
         <div className="flex-shrink-0">
           {getTypeIcon(type)}
         </div>
         <div className="flex-1">
-          <div className="flex items-center justify-between mb-2">
-            <h3 className="text-lg font-semibold capitalize">{type} Alert</h3>
-            <span className="text-xs uppercase font-bold px-2 py-1 bg-black bg-opacity-20 rounded">
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="text-xl font-bold capitalize">{type} Alert</h3>
+            <span className="text-sm uppercase font-bold px-3 py-1 bg-black bg-opacity-20 rounded-full">
               {severity}
             </span>
           </div>
-          <p className="text-sm mb-2">{message}</p>
-          <div className="flex items-center text-xs space-x-4">
-            <div className="flex items-center space-x-1">
-              <MapPin className="w-3 h-3" />
+          <p className="text-lg mb-3">{message}</p>
+          <div className="bg-black bg-opacity-20 p-3 rounded-lg mb-3">
+            <p className="font-semibold text-sm">Immediate Action Required:</p>
+            <p className="text-sm">{getAlertActions(type)}</p>
+          </div>
+          <div className="flex items-center text-sm space-x-6">
+            <div className="flex items-center space-x-2">
+              <MapPin className="w-4 h-4" />
               <span>{location}</span>
             </div>
-            <div className="flex items-center space-x-1">
-              <Clock className="w-3 h-3" />
+            <div className="flex items-center space-x-2">
+              <Clock className="w-4 h-4" />
               <span>{timestamp}</span>
             </div>
           </div>

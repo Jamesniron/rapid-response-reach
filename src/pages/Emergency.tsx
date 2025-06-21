@@ -1,9 +1,8 @@
-
 import React, { useState } from 'react';
 import Navigation from '../components/Navigation';
 import FirstAidGuide from '../components/FirstAidGuide';
 import EmergencyButton from '../components/EmergencyButton';
-import { Video, Phone, MapPin, AlertTriangle, Heart, Flame, Bone, Droplets, Zap, Car } from 'lucide-react';
+import { Video, Phone, MapPin, AlertTriangle, Heart, Flame, Bone, Droplets, Zap, Car, Mountain, Wind } from 'lucide-react';
 import { useToast } from '../hooks/use-toast';
 
 const Emergency = () => {
@@ -19,7 +18,11 @@ const Emergency = () => {
     { id: 'fracture', name: 'Fracture', icon: Bone, urgent: false, color: 'bg-yellow-500' },
     { id: 'poisoning', name: 'Poisoning', icon: Droplets, urgent: true, color: 'bg-purple-500' },
     { id: 'electric', name: 'Electric Shock', icon: Zap, urgent: true, color: 'bg-blue-500' },
-    { id: 'drowning', name: 'Drowning', icon: Droplets, urgent: true, color: 'bg-cyan-500' }
+    { id: 'drowning', name: 'Drowning', icon: Droplets, urgent: true, color: 'bg-cyan-500' },
+    { id: 'earthquake', name: 'Earthquake', icon: Mountain, urgent: true, color: 'bg-gray-600' },
+    { id: 'cyclone', name: 'Cyclone/Hurricane', icon: Wind, urgent: true, color: 'bg-indigo-600' },
+    { id: 'landslide', name: 'Landslide', icon: Mountain, urgent: true, color: 'bg-amber-600' },
+    { id: 'fire', name: 'Fire Emergency', icon: Flame, urgent: true, color: 'bg-red-700' }
   ];
 
   const handleVideoCall = () => {
@@ -58,10 +61,11 @@ const Emergency = () => {
   };
 
   const nearbyHospitals = [
-    { name: 'Kurunegala General Hospital', distance: '2.1 km', phone: '+94-37-2222221', specialties: 'Emergency, Trauma' },
-    { name: 'Lanka Hospital Kurunegala', distance: '3.5 km', phone: '+94-37-2233445', specialties: 'Cardiology, Burns' },
-    { name: 'National Hospital Emergency', distance: '5.2 km', phone: '+94-37-2244567', specialties: 'Poison Control, ICU' },
-    { name: 'Wayamba Provincial Hospital', distance: '1.8 km', phone: '+94-37-2255667', specialties: 'General Emergency' }
+    { name: 'Kurunegala General Hospital', distance: '2.1 km', phone: '+94-37-2222221', specialties: 'Emergency, Trauma, Disaster Response' },
+    { name: 'Lanka Hospital Kurunegala', distance: '3.5 km', phone: '+94-37-2233445', specialties: 'Cardiology, Burns, Critical Care' },
+    { name: 'National Hospital Emergency', distance: '5.2 km', phone: '+94-37-2244567', specialties: 'Poison Control, ICU, Disaster Medicine' },
+    { name: 'Wayamba Provincial Hospital', distance: '1.8 km', phone: '+94-37-2255667', specialties: 'General Emergency, Trauma' },
+    { name: 'Disaster Response Center', distance: '3.2 km', phone: '+94-37-2299888', specialties: 'Natural Disaster Response, Search & Rescue' }
   ];
 
   return (

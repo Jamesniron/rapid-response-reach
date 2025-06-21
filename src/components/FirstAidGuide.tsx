@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { AlertTriangle, Video, FileText, Heart, Flame, Bone, Droplets, Zap } from 'lucide-react';
+import { AlertTriangle, Video, FileText, Heart, Flame, Bone, Droplets, Zap, Mountain, Wind } from 'lucide-react';
 
 interface FirstAidStep {
   step: number;
@@ -239,6 +239,154 @@ const FirstAidGuide = () => {
           warning: "Do NOT induce vomiting unless specifically told to do so."
         }
       ]
+    },
+    earthquake: {
+      steps: [
+        {
+          step: 1,
+          title: "Drop, Cover, Hold On",
+          description: "Drop to hands and knees, take cover under sturdy desk/table, hold on.",
+          critical: true
+        },
+        {
+          step: 2,
+          title: "Stay Where You Are",
+          description: "If indoors, stay indoors. If outdoors, stay outdoors. Don't run outside.",
+          critical: true
+        },
+        {
+          step: 3,
+          title: "Protect Your Head",
+          description: "Cover head and neck with arms if no shelter available."
+        },
+        {
+          step: 4,
+          title: "Stay Away from Hazards",
+          description: "Avoid windows, hanging objects, tall furniture that could fall."
+        },
+        {
+          step: 5,
+          title: "After Shaking Stops",
+          description: "Check for injuries and hazards. Be prepared for aftershocks."
+        },
+        {
+          step: 6,
+          title: "Evacuate if Necessary",
+          description: "Use stairs, not elevators. Watch for falling debris.",
+          warning: "Do NOT stand in doorways - this is outdated advice."
+        }
+      ]
+    },
+    cyclone: {
+      steps: [
+        {
+          step: 1,
+          title: "Seek Shelter Immediately",
+          description: "Get to the lowest floor of a sturdy building, away from windows.",
+          critical: true
+        },
+        {
+          step: 2,
+          title: "Stay Informed",
+          description: "Monitor weather radio or emergency broadcasts for updates.",
+          critical: true
+        },
+        {
+          step: 3,
+          title: "Stay in Safe Room",
+          description: "Choose an interior room on the lowest floor, away from corners."
+        },
+        {
+          step: 4,
+          title: "Protect from Debris",
+          description: "Get under a sturdy table or cover yourself with mattress/blankets."
+        },
+        {
+          step: 5,
+          title: "Wait for All Clear",
+          description: "Stay sheltered until authorities confirm the storm has passed."
+        },
+        {
+          step: 6,
+          title: "Post-Storm Safety",
+          description: "Watch for flooding, downed power lines, and structural damage.",
+          warning: "Do NOT go outside during the eye of the storm - winds will return."
+        }
+      ]
+    },
+    landslide: {
+      steps: [
+        {
+          step: 1,
+          title: "Get to Higher Ground",
+          description: "Move away from the slide area to higher, stable ground immediately.",
+          critical: true
+        },
+        {
+          step: 2,
+          title: "Call Emergency Services",
+          description: "Alert authorities about the landslide and any trapped people.",
+          critical: true
+        },
+        {
+          step: 3,
+          title: "Listen for Unusual Sounds",
+          description: "Trees cracking, boulders knocking, or rumbling sounds indicate danger."
+        },
+        {
+          step: 4,
+          title: "Stay Alert for Floods",
+          description: "Landslides can block rivers and cause sudden flooding."
+        },
+        {
+          step: 5,
+          title: "Avoid the Area",
+          description: "Stay away from the slide area - additional slides may occur."
+        },
+        {
+          step: 6,
+          title: "Check for Injuries",
+          description: "Once safe, check for injuries and provide first aid if trained.",
+          warning: "Do NOT attempt to rescue others if it puts you in danger."
+        }
+      ]
+    },
+    fire: {
+      steps: [
+        {
+          step: 1,
+          title: "Alert Everyone",
+          description: "Shout 'Fire!' and activate fire alarm if available.",
+          critical: true
+        },
+        {
+          step: 2,
+          title: "Call Fire Department",
+          description: "Call 110 immediately, even if fire seems small.",
+          critical: true
+        },
+        {
+          step: 3,
+          title: "Get Low and Go",
+          description: "Stay low under smoke and move quickly to nearest exit."
+        },
+        {
+          step: 4,
+          title: "Feel Doors Before Opening",
+          description: "Use back of hand to feel doors. If hot, find another way out."
+        },
+        {
+          step: 5,
+          title: "Stop, Drop, Roll",
+          description: "If clothes catch fire, stop, drop to ground, and roll to smother flames."
+        },
+        {
+          step: 6,
+          title: "Meet at Assembly Point",
+          description: "Once outside, go to designated meeting point and stay there.",
+          warning: "Do NOT go back inside for any reason - let firefighters handle it."
+        }
+      ]
     }
   };
 
@@ -248,7 +396,11 @@ const FirstAidGuide = () => {
     { id: 'cpr', name: 'CPR', icon: Heart, urgent: true },
     { id: 'burns', name: 'Burns', icon: Flame, urgent: false },
     { id: 'fracture', name: 'Fractures', icon: Bone, urgent: false },
-    { id: 'poisoning', name: 'Poisoning', icon: Droplets, urgent: true }
+    { id: 'poisoning', name: 'Poisoning', icon: Droplets, urgent: true },
+    { id: 'earthquake', name: 'Earthquake', icon: Mountain, urgent: true },
+    { id: 'cyclone', name: 'Cyclone', icon: Wind, urgent: true },
+    { id: 'landslide', name: 'Landslide', icon: Mountain, urgent: true },
+    { id: 'fire', name: 'Fire Emergency', icon: Flame, urgent: true }
   ];
 
   const currentGuide = firstAidData[selectedGuide as keyof typeof firstAidData];
