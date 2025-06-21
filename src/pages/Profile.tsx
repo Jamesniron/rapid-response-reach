@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import Navigation from '../components/Navigation';
 import { User, Phone, Mail, MapPin, Heart, Settings, Bell, Download } from 'lucide-react';
@@ -9,13 +8,13 @@ const Profile = () => {
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
   const [showInstallButton, setShowInstallButton] = useState(false);
   const [profile, setProfile] = useState({
-    fullName: 'Kamal Perera',
-    nic: '123456789V',
-    email: 'kamal.perera@email.com',
-    phone: '+94 71 234 5678',
-    address: '123 Main Street, Kurunegala, North Western Province',
-    emergencyContact: '+94 71 987 6543',
-    medicalInfo: 'Type 2 Diabetes, Blood pressure medication',
+    fullName: '',
+    nic: '',
+    email: '',
+    phone: '',
+    address: '',
+    emergencyContact: '',
+    medicalInfo: '',
     notificationPreferences: {
       email: true,
       sms: true,
@@ -23,6 +22,24 @@ const Profile = () => {
     }
   });
   const { toast } = useToast();
+
+  // Load user data from localStorage on component mount
+  useEffect(() => {
+    const userEmail = localStorage.getItem('userEmail');
+    const savedProfile = localStorage.getItem('userProfile');
+    
+    if (savedProfile) {
+      // Load saved profile data
+      setProfile(JSON.parse(savedProfile));
+    } else if (userEmail) {
+      // Create initial profile with logged-in email
+      setProfile(prev => ({
+        ...prev,
+        email: userEmail,
+        fullName: 'User', // Default name, user can edit
+      }));
+    }
+  }, []);
 
   // Check for PWA install prompt
   useEffect(() => {
@@ -62,10 +79,12 @@ const Profile = () => {
   };
 
   const handleSave = () => {
+    // Save profile data to localStorage
+    localStorage.setItem('userProfile', JSON.stringify(profile));
     setIsEditing(false);
     toast({
       title: "Profile Updated",
-      description: "Your profile information has been successfully updated.",
+      description: "Your profile information has been successfully saved.",
     });
   };
 
@@ -97,7 +116,9 @@ const Profile = () => {
                 <User className="w-8 h-8 text-red-600" />
               </div>
               <div>
-                <h1 className="text-2xl font-bold text-gray-900">{profile.fullName}</h1>
+                <h1 className="text-2xl font-bold text-gray-900">
+                  {profile.fullName || 'User Profile'}
+                </h1>
                 <p className="text-gray-600">Emergency Profile</p>
               </div>
             </div>
@@ -143,9 +164,10 @@ const Profile = () => {
                     value={profile.fullName}
                     onChange={handleInputChange}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                    placeholder="Enter your full name"
                   />
                 ) : (
-                  <p className="text-gray-900">{profile.fullName}</p>
+                  <p className="text-gray-900">{profile.fullName || 'Not set'}</p>
                 )}
               </div>
 
@@ -164,7 +186,7 @@ const Profile = () => {
                     <p className="text-xs text-amber-600 mt-1">⚠️ Please ensure NIC number is correct. Changes require verification.</p>
                   </div>
                 ) : (
-                  <p className="text-gray-900">{profile.nic}</p>
+                  <p className="text-gray-900">{profile.nic || 'Not set'}</p>
                 )}
               </div>
 
@@ -177,11 +199,12 @@ const Profile = () => {
                     value={profile.email}
                     onChange={handleInputChange}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                    placeholder="Enter your email"
                   />
                 ) : (
                   <p className="text-gray-900 flex items-center">
                     <Mail className="w-4 h-4 mr-2 text-gray-400" />
-                    {profile.email}
+                    {profile.email || 'Not set'}
                   </p>
                 )}
               </div>
@@ -195,11 +218,12 @@ const Profile = () => {
                     value={profile.phone}
                     onChange={handleInputChange}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                    placeholder="Enter your phone number"
                   />
                 ) : (
                   <p className="text-gray-900 flex items-center">
                     <Phone className="w-4 h-4 mr-2 text-gray-400" />
-                    {profile.phone}
+                    {profile.phone || 'Not set'}
                   </p>
                 )}
               </div>
@@ -213,11 +237,12 @@ const Profile = () => {
                     onChange={handleInputChange}
                     rows={3}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                    placeholder="Enter your address"
                   />
                 ) : (
                   <p className="text-gray-900 flex items-start">
                     <MapPin className="w-4 h-4 mr-2 text-gray-400 mt-1" />
-                    {profile.address}
+                    {profile.address || 'Not set'}
                   </p>
                 )}
               </div>
@@ -242,11 +267,12 @@ const Profile = () => {
                       value={profile.emergencyContact}
                       onChange={handleInputChange}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                      placeholder="Enter emergency contact number"
                     />
                   ) : (
                     <p className="text-gray-900 flex items-center">
                       <Phone className="w-4 h-4 mr-2 text-gray-400" />
-                      {profile.emergencyContact}
+                      {profile.emergencyContact || 'Not set'}
                     </p>
                   )}
                 </div>
@@ -263,7 +289,7 @@ const Profile = () => {
                       placeholder="Any allergies, medical conditions, or medications"
                     />
                   ) : (
-                    <p className="text-gray-900">{profile.medicalInfo}</p>
+                    <p className="text-gray-900">{profile.medicalInfo || 'Not set'}</p>
                   )}
                 </div>
               </div>
