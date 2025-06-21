@@ -1,4 +1,3 @@
-
 import React from 'react';
 import Navigation from '../components/Navigation';
 import EmergencyAlert from '../components/EmergencyAlert';
@@ -50,7 +49,13 @@ const Dashboard = () => {
 
         {/* Emergency Alert Banner */}
         <div className="mb-8">
-          <EmergencyAlert />
+          <EmergencyAlert 
+            type="flood"
+            severity="high"
+            location="Kurunegala District"
+            message="Heavy rainfall expected in the next 6 hours. Residents in low-lying areas should move to higher ground immediately."
+            timestamp="2 hours ago"
+          />
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
