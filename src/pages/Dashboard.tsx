@@ -1,12 +1,14 @@
-
 import React from 'react';
 import Navigation from '../components/Navigation';
 import EmergencyAlert from '../components/EmergencyAlert';
 import WeatherWidget from '../components/WeatherWidget';
 import LocationWidget from '../components/LocationWidget';
-import { Phone, MapPin, Heart, AlertTriangle, Users, Clock } from 'lucide-react';
+import { Phone, MapPin, Heart, AlertTriangle, Users, Clock, Siren } from 'lucide-react';
+import { useToast } from '../hooks/use-toast';
 
 const Dashboard = () => {
+  const { toast } = useToast();
+
   const emergencyContacts = [
     { name: 'Police', number: '119', color: 'bg-blue-600' },
     { name: 'Fire & Rescue', number: '110', color: 'bg-red-600' },
@@ -39,26 +41,48 @@ const Dashboard = () => {
     { name: 'Report Emergency', icon: AlertTriangle, path: '/emergency', color: 'bg-orange-600' }
   ];
 
+  const handleSOSEmergency = () => {
+    toast({
+      title: "SOS Emergency Activated",
+      description: "Contacting emergency services and sending your location...",
+      variant: "destructive",
+    });
+    
+    // Simulate emergency call initiation
+    setTimeout(() => {
+      toast({
+        title: "Emergency Services Notified",
+        description: "Help is on the way. Stay calm and follow any instructions given.",
+        variant: "destructive",
+      });
+    }, 2000);
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       <Navigation />
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Emergency Dashboard</h1>
-          <p className="text-gray-600">Monitor alerts and access emergency services quickly</p>
-        </div>
-
-        {/* Emergency Alert Banner */}
-        <div className="mb-8">
-          <EmergencyAlert 
-            type="flood"
-            severity="high"
-            location="Kurunegala District"
-            message="Heavy rainfall expected in the next 6 hours. Residents in low-lying areas should move to higher ground immediately."
-            timestamp="2 hours ago"
-          />
+        {/* Header with SOS Button */}
+        <div className="mb-8 flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">Emergency Dashboard</h1>
+            <p className="text-gray-600">Monitor alerts and access emergency services quickly</p>
+          </div>
+          
+          {/* SOS Emergency Button */}
+          <div className="flex-shrink-0">
+            <button
+              onClick={handleSOSEmergency}
+              className="bg-red-600 hover:bg-red-700 text-white font-bold py-4 px-6 rounded-xl shadow-lg transform transition-all duration-200 hover:scale-105 active:scale-95 flex items-center space-x-3 border-4 border-red-700 hover:border-red-800 animate-pulse"
+            >
+              <Siren className="w-6 h-6" />
+              <div className="text-center">
+                <div className="text-lg">SOS</div>
+                <div className="text-xs">EMERGENCY</div>
+              </div>
+            </button>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
