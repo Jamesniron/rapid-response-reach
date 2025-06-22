@@ -1,3 +1,4 @@
+
 import React from 'react';
 import Navigation from '../components/Navigation';
 import EmergencyAlert from '../components/EmergencyAlert';
@@ -18,14 +19,16 @@ const Dashboard = () => {
       type: 'flood', 
       location: 'Kurunegala District', 
       time: '2 hours ago',
-      severity: 'high'
+      severity: 'high',
+      image: 'https://images.unsplash.com/photo-1500375592092-40eb2168fd21?w=400&h=200&fit=crop'
     },
     { 
       id: 2, 
       type: 'accident', 
       location: 'A1 Highway', 
       time: '4 hours ago',
-      severity: 'medium'
+      severity: 'medium',
+      image: 'https://images.unsplash.com/photo-1433086966358-54859d0ed716?w=400&h=200&fit=crop'
     }
   ];
 
@@ -107,23 +110,35 @@ const Dashboard = () => {
               </h2>
               <div className="space-y-4">
                 {recentAlerts.map((alert) => (
-                  <div key={alert.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-                    <div className="flex items-center space-x-4">
-                      <div className={`w-3 h-3 rounded-full ${
-                        alert.severity === 'high' ? 'bg-red-500' : 
-                        alert.severity === 'medium' ? 'bg-yellow-500' : 'bg-green-500'
-                      }`}></div>
-                      <div>
-                        <h4 className="font-semibold text-gray-800 capitalize">{alert.type}</h4>
-                        <p className="text-sm text-gray-600 flex items-center">
-                          <MapPin className="w-4 h-4 mr-1" />
-                          {alert.location}
-                        </p>
-                      </div>
+                  <div key={alert.id} className="flex items-center space-x-4 p-4 bg-gray-50 rounded-lg">
+                    {/* Disaster Image */}
+                    <div className="flex-shrink-0">
+                      <img 
+                        src={alert.image} 
+                        alt={`${alert.type} disaster`}
+                        className="w-16 h-16 rounded-lg object-cover border-2 border-gray-200"
+                      />
                     </div>
-                    <div className="text-sm text-gray-500 flex items-center">
-                      <Clock className="w-4 h-4 mr-1" />
-                      {alert.time}
+                    
+                    {/* Alert Content */}
+                    <div className="flex-1 flex items-center justify-between">
+                      <div className="flex items-center space-x-4">
+                        <div className={`w-3 h-3 rounded-full ${
+                          alert.severity === 'high' ? 'bg-red-500' : 
+                          alert.severity === 'medium' ? 'bg-yellow-500' : 'bg-green-500'
+                        }`}></div>
+                        <div>
+                          <h4 className="font-semibold text-gray-800 capitalize">{alert.type}</h4>
+                          <p className="text-sm text-gray-600 flex items-center">
+                            <MapPin className="w-4 h-4 mr-1" />
+                            {alert.location}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="text-sm text-gray-500 flex items-center">
+                        <Clock className="w-4 h-4 mr-1" />
+                        {alert.time}
+                      </div>
                     </div>
                   </div>
                 ))}
