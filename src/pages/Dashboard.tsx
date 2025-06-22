@@ -1,3 +1,4 @@
+
 import React from 'react';
 import Navigation from '../components/Navigation';
 import EmergencyAlert from '../components/EmergencyAlert';
@@ -22,15 +23,39 @@ const Dashboard = () => {
       location: 'Kurunegala District', 
       time: '2 hours ago',
       severity: 'high',
-      image: 'https://images.unsplash.com/photo-1500375592092-40eb2168fd21?w=400&h=200&fit=crop'
+      image: 'https://images.unsplash.com/photo-1433086966358-54859d0ed716?w=400&h=200&fit=crop'
     },
     { 
       id: 2, 
-      type: 'accident', 
-      location: 'A1 Highway', 
+      type: 'fire', 
+      location: 'Kandy Province', 
       time: '4 hours ago',
       severity: 'medium',
-      image: 'https://images.unsplash.com/photo-1433086966358-54859d0ed716?w=400&h=200&fit=crop'
+      image: 'https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?w=400&h=200&fit=crop'
+    },
+    { 
+      id: 3, 
+      type: 'landslide', 
+      location: 'Nuwara Eliya', 
+      time: '6 hours ago',
+      severity: 'critical',
+      image: 'https://images.unsplash.com/photo-1472396961693-142e6e269027?w=400&h=200&fit=crop'
+    },
+    { 
+      id: 4, 
+      type: 'cyclone', 
+      location: 'Southern Coast', 
+      time: '8 hours ago',
+      severity: 'high',
+      image: 'https://images.unsplash.com/photo-1500375592092-40eb2168fd21?w=400&h=200&fit=crop'
+    },
+    { 
+      id: 5, 
+      type: 'earthquake', 
+      location: 'Central Province', 
+      time: '12 hours ago',
+      severity: 'low',
+      image: 'https://images.unsplash.com/photo-1426604966848-d7adac402bff?w=400&h=200&fit=crop'
     }
   ];
 
@@ -56,6 +81,17 @@ const Dashboard = () => {
         variant: "destructive",
       });
     }, 2000);
+  };
+
+  const getDisasterTypeColor = (type: string) => {
+    switch (type) {
+      case 'flood': return 'border-blue-500';
+      case 'fire': return 'border-red-500';
+      case 'landslide': return 'border-yellow-500';
+      case 'cyclone': return 'border-purple-500';
+      case 'earthquake': return 'border-gray-500';
+      default: return 'border-gray-300';
+    }
   };
 
   return (
@@ -140,23 +176,32 @@ const Dashboard = () => {
                       <img 
                         src={alert.image} 
                         alt={`${alert.type} disaster`}
-                        className="w-16 h-16 rounded-lg object-cover border-2 border-gray-200"
+                        className={`w-20 h-20 rounded-lg object-cover border-4 ${getDisasterTypeColor(alert.type)} shadow-md`}
                       />
                     </div>
                     
                     {/* Alert Content */}
                     <div className="flex-1 flex items-center justify-between">
                       <div className="flex items-center space-x-4">
-                        <div className={`w-3 h-3 rounded-full ${
+                        <div className={`w-4 h-4 rounded-full ${
+                          alert.severity === 'critical' ? 'bg-red-600 animate-pulse' :
                           alert.severity === 'high' ? 'bg-red-500' : 
                           alert.severity === 'medium' ? 'bg-yellow-500' : 'bg-green-500'
                         }`}></div>
                         <div>
-                          <h4 className="font-semibold text-gray-800 capitalize">{alert.type}</h4>
+                          <h4 className="font-semibold text-gray-800 capitalize text-lg">{alert.type} Alert</h4>
                           <p className="text-sm text-gray-600 flex items-center">
                             <MapPin className="w-4 h-4 mr-1" />
                             {alert.location}
                           </p>
+                          <span className={`text-xs uppercase font-bold px-2 py-1 rounded-full ${
+                            alert.severity === 'critical' ? 'bg-red-100 text-red-800' :
+                            alert.severity === 'high' ? 'bg-orange-100 text-orange-800' :
+                            alert.severity === 'medium' ? 'bg-yellow-100 text-yellow-800' : 
+                            'bg-green-100 text-green-800'
+                          }`}>
+                            {alert.severity}
+                          </span>
                         </div>
                       </div>
                       <div className="text-sm text-gray-500 flex items-center">
