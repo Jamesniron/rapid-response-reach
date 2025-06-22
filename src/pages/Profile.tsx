@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Navigation from '../components/Navigation';
-import { User, Phone, Mail, MapPin, Heart, Settings, Bell, Download } from 'lucide-react';
+import { User, Phone, Mail, MapPin, Heart, Settings, Bell, Download, Shield, Lock } from 'lucide-react';
 import { useToast } from '../hooks/use-toast';
 
 const Profile = () => {
@@ -22,6 +22,9 @@ const Profile = () => {
     }
   });
   const { toast } = useToast();
+
+  // Check if NIC has been set (one-time entry restriction)
+  const isNicLocked = profile.nic && profile.nic.trim() !== '';
 
   // Load user data from localStorage on component mount
   useEffect(() => {
@@ -172,21 +175,59 @@ const Profile = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">NIC Number</label>
-                {isEditing ? (
+                <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center">
+                  <Shield className="w-4 h-4 mr-1 text-red-600" />
+                  NIC Number (High Security Field)
+                </label>
+                {isEditing && !isNicLocked ? (
                   <div>
+                    <div className="mb-3 p-4 bg-red-50 border border-red-200 rounded-lg">
+                      <div className="flex items-start space-x-2">
+                        <Lock className="w-5 h-5 text-red-600 mt-0.5 flex-shrink-0" />
+                        <div>
+                          <h4 className="text-sm font-semibold text-red-800 mb-1">⚠️ High Security Field - One-Time Entry Only</h4>
+                          <ul className="text-xs text-red-700 space-y-1">
+                            <li>• Your NIC number can only be entered ONCE for security purposes</li>
+                            <li>• Once saved, it cannot be changed through this form</li>
+                            <li>• Please ensure the number is correct before saving</li>
+                            <li>• Contact support if you need to update this field later</li>
+                            <li>• This information is encrypted and stored securely</li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
                     <input
                       type="text"
                       name="nic"
                       value={profile.nic}
                       onChange={handleInputChange}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
-                      placeholder="Enter your NIC number"
+                      className="w-full px-3 py-2 border-2 border-red-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 bg-red-50"
+                      placeholder="Enter your NIC number (ONE-TIME ENTRY ONLY)"
+                      maxLength={12}
                     />
-                    <p className="text-xs text-amber-600 mt-1">⚠️ Please ensure NIC number is correct. Changes require verification.</p>
+                    <p className="text-xs text-red-600 mt-1 font-medium">
+                      🔒 This field will be permanently locked after saving
+                    </p>
                   </div>
                 ) : (
-                  <p className="text-gray-900">{profile.nic || 'Not set'}</p>
+                  <div>
+                    <div className="flex items-center space-x-2 p-3 bg-gray-50 rounded-lg border">
+                      <Lock className="w-4 h-4 text-gray-500" />
+                      <p className="text-gray-900 font-medium">
+                        {profile.nic || 'Not set'}
+                      </p>
+                      {isNicLocked && (
+                        <span className="text-xs bg-red-100 text-red-700 px-2 py-1 rounded-full font-medium">
+                          🔒 SECURED
+                        </span>
+                      )}
+                    </div>
+                    {isNicLocked && (
+                      <p className="text-xs text-gray-600 mt-1">
+                        This field is permanently locked for security. Contact support to make changes.
+                      </p>
+                    )}
+                  </div>
                 )}
               </div>
 
