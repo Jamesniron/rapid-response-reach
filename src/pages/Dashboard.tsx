@@ -1,4 +1,3 @@
-
 import React from 'react';
 import Navigation from '../components/Navigation';
 import EmergencyAlert from '../components/EmergencyAlert';
@@ -6,6 +5,7 @@ import WeatherWidget from '../components/WeatherWidget';
 import LocationWidget from '../components/LocationWidget';
 import { Phone, MapPin, Heart, AlertTriangle, Users, Clock, Siren } from 'lucide-react';
 import { useToast } from '../hooks/use-toast';
+import PWAInstallButton from '../components/PWAInstallButton';
 
 const Dashboard = () => {
   const { toast } = useToast();
@@ -247,6 +247,9 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
+      
+      {/* PWA Install Banner */}
+      <PWAInstallButton variant="banner" />
     </div>
   );
 };

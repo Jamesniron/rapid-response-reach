@@ -2,11 +2,10 @@ import React, { useState, useEffect } from 'react';
 import Navigation from '../components/Navigation';
 import { User, Phone, Mail, MapPin, Heart, Settings, Bell, Download, Shield, Lock } from 'lucide-react';
 import { useToast } from '../hooks/use-toast';
+import PWAInstallButton from '../components/PWAInstallButton';
 
 const Profile = () => {
   const [isEditing, setIsEditing] = useState(false);
-  const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
-  const [showInstallButton, setShowInstallButton] = useState(false);
   const [profile, setProfile] = useState({
     fullName: '',
     nic: '',
@@ -43,43 +42,6 @@ const Profile = () => {
       }));
     }
   }, []);
-
-  // Check for PWA install prompt
-  useEffect(() => {
-    const handleBeforeInstallPrompt = (e: any) => {
-      e.preventDefault();
-      setDeferredPrompt(e);
-      setShowInstallButton(true);
-    };
-
-    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
-
-    // Check if app is already installed
-    if (window.matchMedia('(display-mode: standalone)').matches) {
-      setShowInstallButton(false);
-    }
-
-    return () => {
-      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
-    };
-  }, []);
-
-  const handleInstallApp = async () => {
-    if (!deferredPrompt) return;
-
-    deferredPrompt.prompt();
-    const { outcome } = await deferredPrompt.userChoice;
-    
-    if (outcome === 'accepted') {
-      toast({
-        title: "App Installing",
-        description: "Emergyfy is being installed on your device.",
-      });
-    }
-    
-    setDeferredPrompt(null);
-    setShowInstallButton(false);
-  };
 
   const handleSave = () => {
     // Save profile data to localStorage
@@ -126,15 +88,7 @@ const Profile = () => {
               </div>
             </div>
             <div className="flex space-x-3">
-              {showInstallButton && (
-                <button
-                  onClick={handleInstallApp}
-                  className="px-4 py-2 bg-green-600 text-white rounded-lg font-semibold hover:bg-green-700 transition-colors flex items-center space-x-2"
-                >
-                  <Download className="w-4 h-4" />
-                  <span>Install App</span>
-                </button>
-              )}
+              <PWAInstallButton showText={true} />
               <button
                 onClick={() => isEditing ? handleSave() : setIsEditing(true)}
                 className={`px-6 py-2 rounded-lg font-semibold transition-colors ${
@@ -336,48 +290,8 @@ const Profile = () => {
               </div>
             </div>
 
-            {/* Mobile App Installation Guide */}
-            <div className="bg-white rounded-xl shadow-lg p-6">
-              <h2 className="text-xl font-semibold text-gray-800 mb-6 flex items-center">
-                <Download className="w-5 h-5 mr-2 text-green-600" />
-                Mobile App Installation
-              </h2>
-              
-              <div className="space-y-4">
-                <div className="p-4 bg-green-50 rounded-lg">
-                  <h3 className="font-semibold text-green-800 mb-2">Install Emergyfy as Mobile App</h3>
-                  <p className="text-sm text-green-700 mb-3">
-                    Get faster access to emergency services by installing our app on your device.
-                  </p>
-                  
-                  <div className="space-y-2 text-sm text-green-700">
-                    <p><strong>Android:</strong></p>
-                    <ul className="list-disc list-inside ml-2 space-y-1">
-                      <li>Tap the menu (⋮) in your browser</li>
-                      <li>Select "Add to Home screen" or "Install app"</li>
-                      <li>Confirm installation</li>
-                    </ul>
-                    
-                    <p className="mt-3"><strong>iPhone/iPad:</strong></p>
-                    <ul className="list-disc list-inside ml-2 space-y-1">
-                      <li>Tap the Share button (□↗) in Safari</li>
-                      <li>Scroll down and tap "Add to Home Screen"</li>
-                      <li>Tap "Add" to confirm</li>
-                    </ul>
-                  </div>
-                </div>
-
-                <div className="p-4 bg-blue-50 rounded-lg">
-                  <h4 className="font-semibold text-blue-800 mb-2">Benefits of Installing:</h4>
-                  <ul className="text-sm text-blue-700 space-y-1">
-                    <li>• Works offline for emergency situations</li>
-                    <li>• Faster access from your home screen</li>
-                    <li>• Push notifications for alerts</li>
-                    <li>• Full-screen experience</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
+            {/* PWA Installation Card */}
+            <PWAInstallButton variant="card" />
 
             {/* Notification Preferences */}
             <div className="bg-white rounded-xl shadow-lg p-6">
@@ -448,6 +362,9 @@ const Profile = () => {
           </div>
         </div>
       </div>
+      
+      {/* PWA Install Banner */}
+      <PWAInstallButton variant="banner" />
     </div>
   );
 };
