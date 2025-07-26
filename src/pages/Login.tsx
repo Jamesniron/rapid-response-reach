@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import Navigation from '../components/Navigation';
 import { Mail, Lock, Eye, EyeOff } from 'lucide-react';
 import { useToast } from '../hooks/use-toast';
+import { loginUser } from '@/Service/authService';
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -23,33 +24,57 @@ const Login = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    
+
     // Simulate login process
-    setTimeout(() => {
-      setIsLoading(false);
-      // Set logged-in state
-      localStorage.setItem('isLoggedIn', 'true');
-      localStorage.setItem('userEmail', formData.email);
-      
+    // setTimeout(() => {
+    //   setIsLoading(false);
+    //   // Set logged-in state
+    //   localStorage.setItem('isLoggedIn', 'true');
+    //   localStorage.setItem('userEmail', formData.email);
+
+    //   toast({
+    //     title: "Login Successful!",
+    //     description: "Welcome back to Emergyfy.",
+    //   });
+    //   navigate('/dashboard');
+    // }, 1000);
+
+
+    try {
+      const response = await loginUser(formData.email, formData.password);
+
+      localStorage.setItem('token', 'loggedUser');
+      localStorage.setItem('userEmail', response.email);
+
       toast({
         title: "Login Successful!",
         description: "Welcome back to Emergyfy.",
       });
+
       navigate('/dashboard');
-    }, 1000);
+    } catch (error: any) {
+      toast({
+        title: "Login Failed",
+        description: error?.response?.data?.message || "Something went wrong.",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+
+
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-red-50 to-blue-50">
       <Navigation />
-      
+
       <div className="flex items-center justify-center px-4 py-16">
         <div className="max-w-md w-full bg-white rounded-2xl shadow-xl overflow-hidden">
           <div className="bg-gradient-to-r from-red-600 to-red-700 p-8 text-white text-center">
             <h1 className="text-3xl font-bold mb-2">Welcome Back</h1>
             <p className="text-red-100">Sign in to access your emergency dashboard</p>
           </div>
-          
+
           <form onSubmit={handleSubmit} className="p-8">
             <div className="space-y-6">
               <div>
