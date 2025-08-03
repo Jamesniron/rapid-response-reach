@@ -43,7 +43,7 @@ const Login = () => {
     try {
       const response = await loginUser(formData.email, formData.password);
 
-      localStorage.setItem('token', 'loggedUser');
+      localStorage.setItem('token', 'niron');
       localStorage.setItem('userEmail', response.email);
 
       toast({

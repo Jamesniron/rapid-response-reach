@@ -23,7 +23,7 @@ const Dashboard = () => {
       location: 'Kurunegala District', 
       time: '2 hours ago',
       severity: 'high',
-      image: 'https://images.unsplash.com/photo-1433086966358-54859d0ed716?w=400&h=200&fit=crop'
+      image: ''
     },
     { 
       id: 2, 
@@ -31,7 +31,7 @@ const Dashboard = () => {
       location: 'Kandy Province', 
       time: '4 hours ago',
       severity: 'medium',
-      image: 'https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?w=400&h=200&fit=crop'
+      image: ''
     },
     { 
       id: 3, 
@@ -39,7 +39,7 @@ const Dashboard = () => {
       location: 'Nuwara Eliya', 
       time: '6 hours ago',
       severity: 'critical',
-      image: 'https://images.unsplash.com/photo-1472396961693-142e6e269027?w=400&h=200&fit=crop'
+      image: ''
     },
     { 
       id: 4, 
@@ -47,7 +47,7 @@ const Dashboard = () => {
       location: 'Southern Coast', 
       time: '8 hours ago',
       severity: 'high',
-      image: 'https://images.unsplash.com/photo-1500375592092-40eb2168fd21?w=400&h=200&fit=crop'
+      image: ''
     },
     { 
       id: 5, 
@@ -55,7 +55,7 @@ const Dashboard = () => {
       location: 'Central Province', 
       time: '12 hours ago',
       severity: 'low',
-      image: 'https://images.unsplash.com/photo-1426604966848-d7adac402bff?w=400&h=200&fit=crop'
+      image: ''
     }
   ];
 
