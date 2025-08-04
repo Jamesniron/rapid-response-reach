@@ -70,10 +70,14 @@ const Login = () => {
 
       <div className="flex items-center justify-center px-4 py-16">
         <div className="max-w-md w-full bg-white rounded-2xl shadow-xl overflow-hidden">
-          <div className="bg-gradient-to-r from-red-600 to-red-700 p-8 text-white text-center">
-            <h1 className="text-3xl font-bold mb-2">Welcome Back</h1>
-            <p className="text-red-100">Sign in to access your emergency dashboard</p>
-          </div>
+         <div className="bg-gradient-to-r from-red-600 to-red-700 p-8 text-white text-center relative">
+          <h1 className="text-3xl font-bold mb-2">Welcome Back</h1>
+          <p className="text-red-100">Sign in to access your emergency dashboard</p>
+          {/* <span className="absolute top-4 right-4 text-2xl cursor-pointer">👤</span> */}
+           <Link to="/adminLogin">
+            <span className="absolute top-4 right-4 text-2xl cursor-pointer">👤</span>
+          </Link>
+        </div>
 
           <form onSubmit={handleSubmit} className="p-8">
             <div className="space-y-6">
