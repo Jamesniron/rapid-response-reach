@@ -20,3 +20,9 @@ export const registorUser = async (name: string, email: string, password: string
 
   return response.data;
 }
+
+// export const getallUsers = async () => {
+//   const response = await axios.get(`${API_BASE_URL}/User`);
+
+//   return response.data;
+// }
